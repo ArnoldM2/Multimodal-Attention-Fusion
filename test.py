@@ -1,8 +1,9 @@
 from eval import train, evaluate
 from Model import HICCAP
 from TorchHelper import TorchHelper
-from torch import optim
 
+import os
+from torch import optim
 import torch
 
 seed = 7
@@ -94,6 +95,9 @@ if __name__=='__main__':
             output_path = f"{output_dir_path}/HCA/{MSAFusion}MSA_HCA"
             #path_res_out = f"{output_path}/{name}_{attention}_{MSAFusion}MSA_Hierarchical_{nhead}_{lys}.out"
             path_res_out = f"{output_path}/Elaheh_Hierarchical_Heads{num_heads}_Encs{num_layers}.out"
+
+    if not os.path.exists(output_path):
+            os.makedirs(output_path)
     
     f = open(path_res_out, "w")
     f.write('=========================\n')
