@@ -188,7 +188,7 @@ class AttentionHead(nn.Module):
 
         # Apply attention mask
         if attention_mask is not None:
-            scores = scores + attention_mask.squeeze(1)
+            scores = scores + attention_mask#.squeeze(1)
         
         # Apply softmax
         attn = self.softmax(scores)
@@ -260,7 +260,7 @@ class CrossAtt(nn.Module):
 
         # Apply attention mask
         if attention_mask is not None:
-            scores = scores + attention_mask.squeeze(1)
+            scores = scores + attention_mask.unsqueeze(1)
 
         # Apply softmax
         attn = self.softmax(scores)
@@ -438,11 +438,11 @@ class MultiHeadAttention(nn.Module):
         # List of Modules (HCA or ParCA)
         if paralel_ca:
             self.heads = nn.ModuleList(
-                ParCA(dim_inp, dim_out, prunning = prunning, dtype_parallel = dtype_parallel)
+                ParCA(dim_inp, dim_out, prunning = prunning, dtype_parallel = dtype_parallel) for _ in range(num_heads)
             )
         else:
             self.heads = nn.ModuleList(
-                HCA(dim_inp, dim_out, prunning = prunning)
+                HCA(dim_inp, dim_out, prunning = prunning) for _ in range(num_heads)
             )
 
         # Linear transformation and layer normalization

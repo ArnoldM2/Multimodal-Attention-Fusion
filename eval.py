@@ -62,9 +62,9 @@ def train(model, optimizer, task:str, path_res_out:str, num_epochs:int = 40, bat
     lr_scheduler = reduce_on_plateau_lr_schdlr(optimizer, 'max', min_lr=1e-8, patience=2, factor=0.5)
 
     for epoch in range(num_epochs):
-        print('[Epoch %d] / %d : %s' % (epoch + 1, num_epochs))
+        print('[Epoch %d] / %d : %s' % (epoch + 1, num_epochs, task))
         f = open(path_res_out, "a")
-        f.write('[Epoch %d] / %d : %s\n' % (epoch + 1, num_epochs))
+        f.write('[Epoch %d] / %d : %s\n' % (epoch + 1, num_epochs, task))
         f.close()
 
         start_time = time.time()
@@ -119,7 +119,7 @@ def train(model, optimizer, task:str, path_res_out:str, num_epochs:int = 40, bat
                 loss.backward()
                 optimizer.step()
 
-            torch_helper.show_progress(batch_idx, len_data, start_time, round(total_loss / (total_len + len(batch['binary'])), 4))
+            torch_helper.show_progress(batch_idx + 1, len_data, start_time, round(total_loss / (batch_idx + 1), 4))
 
         val_pred, val_loss1, val_f1 = evaluate(model, 'val', path_res_out, task = task, batch_size = batch_size)
 

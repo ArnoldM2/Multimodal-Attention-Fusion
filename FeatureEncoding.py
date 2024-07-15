@@ -11,7 +11,7 @@ class FeatureEncoding(nn.Module):
 
         # Text -> BertModel from pretrained
         self.bert = BertModel.from_pretrained('bert-base-uncased', output_hidden_states = True,
-                                              output_attention = True)
+                                              output_attentions = True)
         
         # Auido -> dim_inp: 128 -> rnn_units: 512
         audio_size = 128
@@ -76,15 +76,15 @@ class FeatureEncoding(nn.Module):
         audio_encoded = self.sequential_audio(rnn_audio_encoded)
 
         # Masks
-        extended_text_attention_mask = text_mask.float().unsqueeze(1).unsqueeze(2)
+        extended_text_attention_mask = text_mask.float()#.unsqueeze(1).unsqueeze(2)
         extended_text_attention_mask = extended_text_attention_mask.to(dtype = next(self.parameters()).dtype)
         extended_text_attention_mask = (1.0 - extended_text_attention_mask) * -10000.0
 
-        extended_image_attention_mask = image_mask.float().unsqueeze(1).unsqueeze(2)
+        extended_image_attention_mask = image_mask.float()#.unsqueeze(1).unsqueeze(2)
         extended_image_attention_mask = extended_image_attention_mask.to(dtype = next(self.parameters()).dtype)
         extended_image_attention_mask = (1.0 - extended_image_attention_mask) * -10000.0
 
-        extended_audio_attention_mask = audio_mask.float().unsqueeze(1).unsqueeze(2)
+        extended_audio_attention_mask = audio_mask.float()#.unsqueeze(1).unsqueeze(2)
         extended_audio_attention_mask = extended_audio_attention_mask.to(dtype = next(self.parameters()).dtype)
         extended_audio_attention_mask = (1.0 - extended_audio_attention_mask) * -10000.0
 
